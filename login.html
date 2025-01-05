@@ -49,18 +49,49 @@
     <div class="login-container">
         <h2>Вы не авторизованы. Пожалуйста, войдите в систему используя один из ниже перечисленных способов:</h2>
         <div class="login-buttons">
-            <button>
+            <button onclick="login('github')">
                 <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20">
                 GitHub
             </button>
-            <button>
+            <button onclick="login('yandex')">
                 <img src="https://yastatic.net/s3/home/logos/share/share-logo-ru.png" alt="Yandex ID" width="20">
                 Яндекс ID
             </button>
-            <button>
+            <button onclick="login('code')">
                 CODE
             </button>
         </div>
     </div>
+    <script>
+        async function login(type) {
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ type }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        // Сохраняем токен сессии в куки (в реальной реализации это может делаться сервером)
+                        document.cookie = `sessionToken=${data.sessionToken}; path=/`;
+
+                        // Перенаправление на personal.html
+                        window.location.href = 'personal.html';
+                    } else {
+                        alert('Ошибка авторизации. Пожалуйста, попробуйте снова.');
+                    }
+                } else {
+                    alert('Ошибка авторизации. Пожалуйста, попробуйте снова.');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert('Ошибка авторизации. Пожалуйста, попробуйте снова.');
+            }
+        }
+    </script>
 </body>
 </html>

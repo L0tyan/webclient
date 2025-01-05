@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дисциплины</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            font-family: Arial, sans-serif;
+        }
+        .links {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .disciplines-container {
+            padding: 20px 40px;
+            text-align: center;
+            width: 600px;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #6e8efb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #5a73e8;
+        }
+        .discipline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #ffa500;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .edit-btn:hover {
+            background-color: #cc8400;
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="links">
+        <a href="personal.html">Настройки</a>
+        <a href="disciplines.html">Дисциплины</a>
+    </div>
+    <div class="disciplines-container">
+        <h2>Дисциплины</h2>
+        <div id="disciplines-list">
+            <!-- Здесь будут отображаться дисциплины -->
+        </div>
+        <div id="teacher-tools" style="display: none;">
+            <label for="discipline-name">Добавить дисциплину</label>
+            <input type="text" id="discipline-name" placeholder="Название дисциплины">
+            <button class="btn" onclick="addDiscipline()">Добавить</button>
+        </div>
+        <div id="student-tools" style="display: none;">
+            <label for="existing-discipline-name">Добавить существующую дисциплину</label>
+            <input type="text" id="existing-discipline-name" placeholder="Название существующей дисциплины">
+            <button class="btn" onclick="addExistingDiscipline()">Добавить</button>
+        </div>
+    </div>
+    <script>
+        const role = 'Преподаватель'; // Измени на 'Студент', чтобы протестировать для студента
+        const existingDisciplinesSet = new Set(['Математика', 'Физика', 'Химия']); // Добавление дисциплин вручную
+
+        function checkRole() {
+            const teacherTools = document.getElementById('teacher-tools');
+            const studentTools = document.getElementById('student-tools');
+            if (role === 'Преподаватель') {
+                teacherTools.style.display = 'block';
+            } else if (role === 'Студент') {
+                studentTools.style.display = 'block';
+            }
+        }
+
+        function addDiscipline() {
+            const disciplineName = document.getElementById('discipline-name').value.trim();
+            const disciplinesList = document.getElementById('disciplines-list');
+            const existingDisciplines = document.querySelectorAll('.discipline span');
+
+            if (!disciplineName) {
+                alert('Название дисциплины не может быть пустым!');
+                return;
+            }
+
+            // Проверка на дублирование дисциплины
+            for (let i = 0; i < existingDisciplines.length; i++) {
+                if (existingDisciplines[i].textContent === disciplineName) {
+                    alert('Дисциплина с таким названием уже существует!');
+                    return;
+                }
+            }
+
+            const disciplineDiv = document.createElement('div');
+            disciplineDiv.className = 'discipline';
+
+            const disciplineSpan = document.createElement('span');
+            disciplineSpan.textContent = disciplineName;
+
+            disciplineDiv.appendChild(disciplineSpan);
+            disciplineDiv.onclick = () => {
+                window.location.href = `class.html?discipline=${encodeURIComponent(disciplineName)}`;
+            };
+
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-btn';
+            editButton.textContent = 'Редактировать';
+            editButton.onclick = function (event) {
+                event.stopPropagation();
+                const newName = prompt('Введите новое название дисциплины', disciplineSpan.textContent);
+                if (newName) {
+                    // Проверка на дублирование при редактировании
+                    for (let i = 0; i < existingDisciplines.length; i++) {
+                        if (existingDisciplines[i].textContent === newName) {
+                            alert('Дисциплина с таким названием уже существует!');
+                            return;
+                        }
+                    }
+                    disciplineSpan.textContent = newName;
+                }
+            };
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'delete-btn';
+            deleteButton.textContent = 'Удалить';
+            deleteButton.onclick = function (event) {
+                event.stopPropagation();
+                if (confirm('Вы точно хотите удалить дисциплину?')) {
+                    disciplinesList.removeChild(disciplineDiv);
+                }
+            };
+
+            disciplineDiv.appendChild(editButton);
+            disciplineDiv.appendChild(deleteButton);
+
+            disciplinesList.appendChild(disciplineDiv);
+            document.getElementById('discipline-name').value = '';
+
+            // Добавление дисциплины в набор существующих
+            existingDisciplinesSet.add(disciplineName);
+        }
+
+        function addExistingDiscipline() {
+            const existingDisciplineName = document.getElementById('existing-discipline-name').value.trim();
+            const disciplinesList = document.getElementById('disciplines-list');
+
+            if (!existingDisciplineName) {
+                alert('Название дисциплины не может быть пустым!');
+                return;
+            }
+
+            // Проверка существования дисциплины в наборе
+            if (!existingDisciplinesSet.has(existingDisciplineName)) {
+                alert('Дисциплина с таким названием не существует!');
+                return;
+            }
+
+            const disciplineDiv = document.createElement('div');
+            disciplineDiv.className = 'discipline';
+
+            const disciplineSpan = document.createElement('span');
+            disciplineSpan.textContent = existingDisciplineName;
+
+            disciplineDiv.appendChild(disciplineSpan);
+            disciplineDiv.onclick = () => {
+                window.location.href = `class.html?discipline=${encodeURIComponent(existingDisciplineName)}`;
+            };
+
+            disciplinesList.appendChild(disciplineDiv);
+            document.getElementById('existing-discipline-name').value = '';
+        }
+
+        window.onload = checkRole;
+    </script>
+</body>
+</html>

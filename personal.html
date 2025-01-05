@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            font-family: Arial, sans-serif;
+        }
+        .links {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .links a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+        .profile-container {
+            padding: 20px 40px;
+            text-align: center;
+            width: 400px;
+	    margin-top: 80px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+        input[type="text"], input[type="email"], input[readonly] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: #6e8efb;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #5a73e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="links">
+        <a href="personal.html">Настройки</a>
+        <a href="disciplines.html">Дисциплины</a>
+    </div>
+    <div class="profile-container">
+        <h2>Персональные данные</h2>
+        <label for="first-name">Имя</label>
+        <input type="text" id="first-name" placeholder="Введите имя">
+        <label for="last-name">Фамилия</label>
+        <input type="text" id="last-name" placeholder="Введите фамилию">
+        <label for="middle-name">Отчество</label>
+        <input type="text" id="middle-name" placeholder="Введите отчество">
+        <label for="role">Роль</label>
+        <input type="text" id="role" value="Преподаватель" readonly>
+        <button class="btn">Изменить</button>
+        <h2>Почта</h2>
+        <label for="email">Электронная почта</label>
+        <input type="email" id="email" readonly>
+        <h2>Логин</h2>
+        <label for="login">Логин</label>
+        <input type="text" id="login" placeholder="Введите логин">
+        <button class="btn">Изменить</button>
+    </div>
+</body>
+</html>
